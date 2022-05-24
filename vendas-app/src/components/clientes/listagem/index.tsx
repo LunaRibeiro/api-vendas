@@ -7,6 +7,10 @@ import { DataTable, DataTablePageParams } from 'primereact/datatable'
 import { Column } from 'primereact/column'
 import { Page } from 'app/models/common/page'
 import { useClienteService } from 'app/services'
+import { Button } from 'primereact/button'
+import { resizeImage } from 'next/dist/server/image-optimizer'
+import  Router  from 'next/router'
+import { confirmPopup } from 'primereact/confirmpopup'
 
 interface ConsultaClientesForm {
     nome?: string;
@@ -44,6 +48,31 @@ export const ListagemClientes: React.FC = () => {
                 .then(result => {
                     setClientes({... result, first: event?.first})
                 }).finally(() => setLoading(false))
+    }
+
+    const actionTemplate = (registro: Cliente) => {
+        const url = `/cadastros/clientes?id=${registro.id}`
+        return(
+
+            <div>
+                <Button label='Editar' 
+                        className='p-button-rounded p-button-info' 
+                        onClick={e => Router.push(url) }
+                        />
+                
+                <Button label='Excluir'
+                        
+                        onClick={e => {
+                            confirmPopup({
+                                message: "Confirma a exclusão deste registro?",
+                                acceptLabel: "Sim",
+                                rejectLabel: "Não"
+                            })
+                        }} 
+                            className='p-button-rounded p-button-danger'                   
+                        />
+            </div>
+        )
     }
 
     return (
@@ -92,6 +121,7 @@ export const ListagemClientes: React.FC = () => {
                         <Column field="nome" header="Nome"  />
                         <Column field="cpf" header="CPF"  />
                         <Column field="email" header="Email" />
+                        <Column body={actionTemplate} />
                     </DataTable>
                 </div>
             </div>
