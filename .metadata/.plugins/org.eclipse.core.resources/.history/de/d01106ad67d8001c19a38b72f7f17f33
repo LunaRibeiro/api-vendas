@@ -1,0 +1,5 @@
+package io.github.lunaribeiro.vendasapi.rest.clientes;
+
+public class ClienteController {
+
+}
