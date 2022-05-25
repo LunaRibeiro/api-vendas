@@ -5,14 +5,11 @@ import { useFormik } from 'formik'
 import { useState } from 'react'
 import { DataTable, DataTablePageParams } from 'primereact/datatable'
 import { Column } from 'primereact/column'
-import { Page } from 'app/models/common/page'
-import { useClienteService } from 'app/services'
 import { Button } from 'primereact/button'
 import { confirmDialog } from 'primereact/confirmdialog'
-import { confirmPopup } from 'primereact/confirmpopup'
-import { resizeImage } from 'next/dist/server/image-optimizer'
-import  Router  from 'next/router'
-
+import { Page } from 'app/models/common/page'
+import { useClienteService } from 'app/services'
+import Router from 'next/router'
 
 interface ConsultaClientesForm {
     nome?: string;
@@ -22,17 +19,17 @@ interface ConsultaClientesForm {
 export const ListagemClientes: React.FC = () => {
 
     const service = useClienteService();
-    const [ loading, setLoading ] = useState<boolean>(false)
+    const [ loading, setLoading ] = useState<boolean>(false) 
     const [ clientes, setClientes]  = useState<Page<Cliente>>({
         content: [],
         first: 0,
         number: 0,
-        size: 10,
+        size: 5,
         totalElements: 0
     });
 
     const handleSubmit = (filtro: ConsultaClientesForm) => {
-       handlePage(null)
+        handlePage(null);
     }
 
     const { 
@@ -48,39 +45,34 @@ export const ListagemClientes: React.FC = () => {
         setLoading(true)
         service.find(filtro.nome, filtro.cpf, event?.page, event?.rows)
                 .then(result => {
-                    setClientes({... result, first: event?.first})
+                    setClientes({...result, first: event?.first })
                 }).finally(() => setLoading(false))
     }
 
-const deletar = (cliente: Cliente) => {
-    service.deletar(cliente.id).then(result => {
-        handlePage(null)
-    })
-}
+    const deletar = (cliente: Cliente) => {
+        service.deletar(cliente.id).then(result => {
+            handlePage(null)
+        })
+    }
 
     const actionTemplate = (registro: Cliente) => {
         const url = `/cadastros/clientes?id=${registro.id}`
-        return(
-
+        return (
             <div>
-                <Button label='Editar' 
-                        className='p-button-rounded p-button-info' 
+                <Button label="Editar" 
+                        className="p-button-rounded p-button-info"
                         onClick={e => Router.push(url) }
                         />
-                
-                <Button label='Excluir'
-                        
-                        onClick={e => {
-                            confirmDialog({
-                                message: "Confirma a exclusão deste registro?",
-                                acceptLabel: "Sim",
-                                rejectLabel: "Não",
-                                accept: () => deletar(registro),
-                                header: "Confirmação"
-                            })
-                        }} 
-                            className='p-button-rounded p-button-danger'                   
-                        />
+                <Button label="Deletar" onClick={event => {
+                    confirmDialog({
+                        message: "Confirma a exclusão deste registro?",
+                        acceptLabel: "Sim",
+                        rejectLabel: "Não",
+                        accept: () => deletar(registro),
+                        header: "Confirmação"
+                    })
+                }}
+                        className="p-button-rounded p-button-danger" />
             </div>
         )
     }
@@ -109,7 +101,6 @@ const deletar = (cliente: Cliente) => {
                             Consultar                     
                         </button>
                     </div>
-
                     <div className="control is-link">
                         <button type="submit" 
                                 onClick={e => Router.push("/cadastros/clientes")} 
@@ -126,15 +117,14 @@ const deletar = (cliente: Cliente) => {
             <div className="columns">
                 <div className="is-full">
                     <DataTable value={clientes.content} 
-                                totalRecords={clientes.totalElements}
-                                lazy paginator
-                                first={clientes.first}
-                                rows={clientes.size}
-                                onPage={handlePage}
-                                loading={loading}
-                                emptyMessage="Nenhum registro encontrado."
-                                >
-
+                               totalRecords={clientes.totalElements}
+                               lazy paginator
+                               first={clientes.first}
+                               rows={clientes.size}
+                               onPage={handlePage}
+                               loading={loading}
+                               emptyMessage="Nenhum registro."
+                               >
                         <Column field="id" header="Código"  />
                         <Column field="nome" header="Nome"  />
                         <Column field="cpf" header="CPF"  />

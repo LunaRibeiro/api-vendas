@@ -1,4 +1,4 @@
-export interface Page<T>{
+export interface Page<T> {
     content: Array<T>;
     size: number;
     number: number;

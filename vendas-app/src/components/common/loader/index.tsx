@@ -1,8 +1,15 @@
-interface LoaderProps{
+import React from "react"
+
+interface LoaderProps {
     show: boolean;
 }
 
-export const Loader: React.FC<LoaderProps> = () => {
+export const Loader: React.FC<LoaderProps> = ({ show }) => {
+
+    if(!show){
+        return <React.Fragment></React.Fragment>
+    }
+
     return (
         <div id="loader" style={{
             background: 'rgba(255,255,255,0.5)',
@@ -18,23 +25,18 @@ export const Loader: React.FC<LoaderProps> = () => {
                 left: '20%',
                 top: '30%'
             }}>
-                <div className="lds-spinner">
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                </div>
-
+                    <div className="lds-spinner">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
             </div>
-
         </div>
     )
 }

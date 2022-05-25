@@ -1,4 +1,4 @@
-import { useEffect} from 'react'
+import { useEffect } from 'react'
 import { Layout } from 'components'
 import { useState } from 'react'
 import { ClienteForm } from './form'
@@ -10,39 +10,38 @@ import { useRouter } from 'next/router'
 export const CadastroCliente: React.FC = () => {
 
     const [cliente, setCliente] = useState<Cliente>({});
-    const [ message, setMessages ] = useState<Array<Alert>>([])
+    const [ messages, setMessages ] = useState<Array<Alert>>([])
     const service = useClienteService();
     const router = useRouter();
     const { id } = router.query;
 
     useEffect( () => {
-
-        if (id){
+        if(id){
             service.carregarCliente(id)
-                    .then(clienteEncontrado => setCliente(clienteEncontrado) )
+                .then(clienteEncontrado => setCliente(clienteEncontrado) )
         }
-    }, [id])
+    }, [id] )
 
-    const handleSubmit = (cliente: Cliente) => {        
+    const handleSubmit = (cliente: Cliente) => {       
         if(cliente.id){
             service.atualizar(cliente).then(response => {
                 setMessages([{
                     tipo: "success", texto: "Cliente atualizado com sucesso!"
-                }])
+                }])      
             })
-        }else{
+        }  else {
             service.salvar(cliente)
                     .then(clienteSalvo => {
                         setCliente(clienteSalvo);
                         setMessages([{
                             tipo: "success", texto: "Cliente salvo com sucesso!"
-                        }])
-                    }) 
-        }
+                        }])                
+                    })
+        } 
     }
 
     return (
-        <Layout titulo="Clientes" mensagens={message} >
+        <Layout titulo="Clientes" mensagens={messages}>
             <ClienteForm cliente={cliente} onSubmit={handleSubmit} />
         </Layout>
     )
