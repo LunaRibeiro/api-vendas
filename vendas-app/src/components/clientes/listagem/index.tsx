@@ -9,9 +9,10 @@ import { Page } from 'app/models/common/page'
 import { useClienteService } from 'app/services'
 import { Button } from 'primereact/button'
 import { confirmDialog } from 'primereact/confirmdialog'
+import { confirmPopup } from 'primereact/confirmpopup'
 import { resizeImage } from 'next/dist/server/image-optimizer'
 import  Router  from 'next/router'
-import { confirmPopup } from 'primereact/confirmpopup'
+
 
 interface ConsultaClientesForm {
     nome?: string;
@@ -106,6 +107,14 @@ const deletar = (cliente: Cliente) => {
                     <div className="control is-link">
                         <button type="submit" className="button is-success">
                             Consultar                     
+                        </button>
+                    </div>
+
+                    <div className="control is-link">
+                        <button type="submit" 
+                                onClick={e => Router.push("/cadastros/clientes")} 
+                                className="button is-warning">
+                            Novo                     
                         </button>
                     </div>
                 </div>  
