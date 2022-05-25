@@ -53,10 +53,9 @@ INDEX VERSION 1.131+C:\Users\Suporte08\Desktop\Curso Udemy\.metadata\.plugins\or
 1801634740.index
 159734928.index
 695975096.index
-870196570.index
 229701094.index
-2617683394.index
 1975677728.index
+2617683394.index
 3103197157.index
 2635058890.index
 2912933477.index
