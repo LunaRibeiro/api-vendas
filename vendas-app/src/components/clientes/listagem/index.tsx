@@ -8,6 +8,7 @@ import { Column } from 'primereact/column'
 import { Page } from 'app/models/common/page'
 import { useClienteService } from 'app/services'
 import { Button } from 'primereact/button'
+import { confirmDialog } from 'primereact/confirmdialog'
 import { resizeImage } from 'next/dist/server/image-optimizer'
 import  Router  from 'next/router'
 import { confirmPopup } from 'primereact/confirmpopup'
@@ -50,6 +51,12 @@ export const ListagemClientes: React.FC = () => {
                 }).finally(() => setLoading(false))
     }
 
+const deletar = (cliente: Cliente) => {
+    service.deletar(cliente.id).then(result => {
+        handlePage(null)
+    })
+}
+
     const actionTemplate = (registro: Cliente) => {
         const url = `/cadastros/clientes?id=${registro.id}`
         return(
@@ -63,10 +70,12 @@ export const ListagemClientes: React.FC = () => {
                 <Button label='Excluir'
                         
                         onClick={e => {
-                            confirmPopup({
+                            confirmDialog({
                                 message: "Confirma a exclusão deste registro?",
                                 acceptLabel: "Sim",
-                                rejectLabel: "Não"
+                                rejectLabel: "Não",
+                                accept: () => deletar(registro),
+                                header: "Confirmação"
                             })
                         }} 
                             className='p-button-rounded p-button-danger'                   
