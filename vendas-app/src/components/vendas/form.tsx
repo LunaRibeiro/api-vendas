@@ -9,8 +9,9 @@ import { Produto } from 'app/models/produtos'
 import { useClienteService, useProdutoService } from 'app/services'
 import { Button } from 'primereact/button'
 import { InputText } from 'primereact/inputtext'
+import { Dialog } from 'primereact/dialog'
 
-interface VendasFormProps{
+interface VendasFormProps {
     onSubmit: (venda: Venda) => void;
 }
 
@@ -27,9 +28,10 @@ export const VendasForm: React.FC<VendasFormProps> = ({
 
     const clienteService = useClienteService();
     const produtoService = useProdutoService();
-    const [codigoProduto, setCodigoProduto ] = useState<string>("");
+    const [mensagem, setMensagem] = useState<string>('');
+    const [codigoProduto, setCodigoProduto] = useState<string>("");
     const [produto, setProduto] = useState<Produto>(null);
-    const [ listaClientes, setListaClientes ] = useState<Page<Cliente>>({
+    const [listaClientes, setListaClientes] = useState<Page<Cliente>>({
         content: [],
         first: 0,
         number: 0,
@@ -37,27 +39,31 @@ export const VendasForm: React.FC<VendasFormProps> = ({
         totalElements: 0
     })
 
-    const formik = useFormik<Venda>( {
+    const formik = useFormik<Venda>({
         onSubmit,
-        initialValues:  formScheme
+        initialValues: formScheme
     })
 
-    const handleClienteAutocomplete = (e: AutoCompleteCompleteMethodParams ) => {
+    const handleClienteAutocomplete = (e: AutoCompleteCompleteMethodParams) => {
         const nome = e.query
         clienteService
             .find(nome, '', 0, 20)
             .then(clientes => setListaClientes(clientes))
     }
 
-    const handleClienteChange= (e: AutoCompleteChangeParams) => {
+    const handleClienteChange = (e: AutoCompleteChangeParams) => {
         const clienteSelecionado: Cliente = e.value;
         formik.setFieldValue("cliente", clienteSelecionado)
     }
 
     const handleCodigoProdutoSelect = (event) => {
-        produtoService.carregarProduto(codigoProduto)
-                        .then(produtoEncontrado => setProduto(produtoEncontrado))
-                        .catch(error => console.log(error))
+        if (codigoProduto) {
+            produtoService.carregarProduto(codigoProduto)
+                .then(produtoEncontrado => setProduto(produtoEncontrado))
+                .catch(error => {
+                    setMensagem("Produto não encontrado!")
+                })
+        }
     }
 
     const handleAddProduto = () => {
@@ -67,50 +73,70 @@ export const VendasForm: React.FC<VendasFormProps> = ({
         setCodigoProduto('')
     }
 
+    const handleFecharDialog = () => {
+        setMensagem('')
+        setCodigoProduto('')
+        setProduto(null)
+    }
+
+    const dialogMensagemFooter = () => {
+        return (
+            <div>
+                <Button label='BLZ' onClick={e => setMensagem('')} />
+            </div>
+        )
+    }
+
     return (
         <form onSubmit={formik.handleSubmit} >
             <div className='p-fluid'>
                 <div className='p-field'>
                     <label htmlFor="cliente">Cliente:</label>
-                    <AutoComplete 
-                                suggestions={listaClientes.content}
-                                completeMethod={handleClienteAutocomplete}
-                                value={formik.values.cliente}
-                                field="nome"
-                                id='cliente'
-                                name='cliente'
-                                onChange={handleClienteChange} />
+                    <AutoComplete
+                        suggestions={listaClientes.content}
+                        completeMethod={handleClienteAutocomplete}
+                        value={formik.values.cliente}
+                        field="nome"
+                        id='cliente'
+                        name='cliente'
+                        onChange={handleClienteChange} />
                 </div>
                 <div className='p-grid'>
                     <div className='p-col-2'>
                         <span className='p-float-label'>
-                            <InputText  id="codigoProduto" 
+                            <InputText id="codigoProduto"
                                 onBlur={handleCodigoProdutoSelect}
                                 value={codigoProduto}
-                                onChange={e => setCodigoProduto(e.target.value)}/>
+                                onChange={e => setCodigoProduto(e.target.value)} />
                             <label htmlFor="codigoProduto">Código</label>
                         </span>
                     </div>
 
                     <div className='p-col-6'>
-                        <AutoComplete value={produto} field="nome"/>
+                        <AutoComplete value={produto} field="nome" />
                     </div>
 
                     <div className='p-col-2'>
                         <span className='p-float-label'>
-                            <InputText  id="qtdProduto" />
+                            <InputText id="qtdProduto" />
                             <label htmlFor="qtdProduto">Quantidade</label>
                         </span>
                     </div>
 
                     <div className='p-col-2'>
-                        <Button label='Adicionar' onClick={handleAddProduto} />
+                        <Button type="button" label='Adicionar' onClick={handleAddProduto} />
                     </div>
 
 
                 </div>
-                <Button type="submit" label="Finalizar"/>
+                <Button type="submit" label="Finalizar" />
             </div>
+            <Dialog header="Atenção" position='center'
+                visible={!!mensagem}
+                onHide={handleFecharDialog}
+                footer={dialogMensagemFooter}>
+                {mensagem}
+            </Dialog>
 
         </form>
     )
