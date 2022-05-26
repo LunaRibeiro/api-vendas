@@ -7,6 +7,7 @@ import { Page } from 'app/models/common/page'
 import { Cliente } from 'app/models/clientes'
 import { useClienteService } from 'app/services'
 import { Button } from 'primereact/button'
+import { InputText } from 'primereact/inputtext'
 
 interface VendasFormProps{
     onSubmit: (venda: Venda) => void;
@@ -23,9 +24,8 @@ export const VendasForm: React.FC<VendasFormProps> = ({
     onSubmit
 }) => {
 
-    const clienteService = useClienteService()
-
-
+    const clienteService = useClienteService();
+    const [codigoProduto, setCodigoProduto ] = useState<string>("");
     const [ listaClientes, setListaClientes ] = useState<Page<Cliente>>({
         content: [],
         first: 0,
@@ -50,6 +50,11 @@ export const VendasForm: React.FC<VendasFormProps> = ({
         const clienteSelecionado: Cliente = e.value;
         formik.setFieldValue("cliente", clienteSelecionado)
     }
+
+    const handleCodigoProdutoSelect = (event) => {
+        console.log(codigoProduto)
+    }
+
     return (
         <form onSubmit={formik.handleSubmit} >
             <div className='p-fluid'>
@@ -64,8 +69,37 @@ export const VendasForm: React.FC<VendasFormProps> = ({
                                 name='cliente'
                                 onChange={handleClienteChange} />
                 </div>
+                <div className='p-grid'>
+                    <div className='p-col-2'>
+                        <span className='p-float-label'>
+                            <InputText  id="codigoProduto" 
+                                onBlur={handleCodigoProdutoSelect}
+                                value={codigoProduto}
+                                onChange={e => setCodigoProduto(e.target.value)}/>
+                            <label htmlFor="codigoProduto">Código</label>
+                        </span>
+                    </div>
+
+                    <div className='p-col-6'>
+                        <AutoComplete  />
+                    </div>
+
+                    <div className='p-col-2'>
+                        <span className='p-float-label'>
+                            <InputText  id="qtdProduto" />
+                            <label htmlFor="qtdProduto">Quantidade</label>
+                        </span>
+                    </div>
+
+                    <div className='p-col-2'>
+                        <Button label='Adicionar' />
+                    </div>
+
+
+                </div>
                 <Button type="submit" label="Finalizar"/>
-            </div>    
+            </div>
+
         </form>
     )
 }
