@@ -5,7 +5,8 @@ import { AutoComplete, AutoCompleteChangeParams, AutoCompleteCompleteMethodParam
 import { useState } from 'react'
 import { Page } from 'app/models/common/page'
 import { Cliente } from 'app/models/clientes'
-import { useClienteService } from 'app/services'
+import { Produto } from 'app/models/produtos'
+import { useClienteService, useProdutoService } from 'app/services'
 import { Button } from 'primereact/button'
 import { InputText } from 'primereact/inputtext'
 
@@ -25,7 +26,9 @@ export const VendasForm: React.FC<VendasFormProps> = ({
 }) => {
 
     const clienteService = useClienteService();
+    const produtoService = useProdutoService();
     const [codigoProduto, setCodigoProduto ] = useState<string>("");
+    const [produto, setProduto] = useState<Produto>(null);
     const [ listaClientes, setListaClientes ] = useState<Page<Cliente>>({
         content: [],
         first: 0,
@@ -52,7 +55,16 @@ export const VendasForm: React.FC<VendasFormProps> = ({
     }
 
     const handleCodigoProdutoSelect = (event) => {
-        console.log(codigoProduto)
+        produtoService.carregarProduto(codigoProduto)
+                        .then(produtoEncontrado => setProduto(produtoEncontrado))
+                        .catch(error => console.log(error))
+    }
+
+    const handleAddProduto = () => {
+        const produtosJaAdicionados = formik.values.produtos
+        produtosJaAdicionados.push(produto)
+        setProduto(null)
+        setCodigoProduto('')
     }
 
     return (
@@ -81,7 +93,7 @@ export const VendasForm: React.FC<VendasFormProps> = ({
                     </div>
 
                     <div className='p-col-6'>
-                        <AutoComplete  />
+                        <AutoComplete value={produto} field="nome"/>
                     </div>
 
                     <div className='p-col-2'>
@@ -92,7 +104,7 @@ export const VendasForm: React.FC<VendasFormProps> = ({
                     </div>
 
                     <div className='p-col-2'>
-                        <Button label='Adicionar' />
+                        <Button label='Adicionar' onClick={handleAddProduto} />
                     </div>
 
 
