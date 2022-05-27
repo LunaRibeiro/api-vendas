@@ -1,5 +1,0 @@
-package io.github.lunaribeiro.vendasapi.model.repository;
-
-public interface ClienteRepository {
-
-}

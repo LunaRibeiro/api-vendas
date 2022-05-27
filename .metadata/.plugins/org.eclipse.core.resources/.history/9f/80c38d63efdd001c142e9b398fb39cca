@@ -1,0 +1,8 @@
+package io.github.lunaribeiro.vendasapi.model.repository;
+
+import org.springframework.stereotype.Repository;
+
+@Repository
+public class VendaRepository extends JpaRepository<Venda, Long> {
+
+}
