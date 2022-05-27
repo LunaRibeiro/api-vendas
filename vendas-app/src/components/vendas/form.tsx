@@ -30,6 +30,8 @@ export const VendasForm: React.FC<VendasFormProps> = ({
 
     const clienteService = useClienteService();
     const produtoService = useProdutoService();
+    const [listaProdutos, setListaProdutos] = useState<Produto[]>([])
+    const [listaFiltradaProdutos, setListaFiltradaProdutos] = useState<Produto[]>([])
     const [mensagem, setMensagem] = useState<string>('');
     const [codigoProduto, setCodigoProduto] = useState<string>("");
     const [quantidadeProduto, setQuantidadeProduto] = useState<number>(0);
@@ -114,6 +116,20 @@ export const VendasForm: React.FC<VendasFormProps> = ({
         return !produto || !quantidadeProduto
     }
 
+    const handleProdutoAutocomplete = async (e: AutoCompleteCompleteMethodParams) => {
+
+        if (!listaProdutos.length) {
+            const produtosEncontrados = await produtoService.listar()
+                setListaProdutos(produtosEncontrados)
+        }
+
+        const produtosEncontrados = listaProdutos.filter((produto: Produto) => {
+            return (produto.nome.toUpperCase().includes(e.query.toUpperCase()))
+        })
+
+        setListaFiltradaProdutos(produtosEncontrados)
+    }
+
     return (
         <form onSubmit={formik.handleSubmit} >
             <div className='p-fluid'>
@@ -140,7 +156,13 @@ export const VendasForm: React.FC<VendasFormProps> = ({
                     </div>
 
                     <div className='p-col-6'>
-                        <AutoComplete value={produto} field="nome" />
+                        <AutoComplete suggestions={listaFiltradaProdutos}
+                            id='produto'
+                            name='produto'
+                            completeMethod={handleProdutoAutocomplete}
+                            value={produto}
+                            field="nome"
+                            onChange={e => setProduto(e.value)} />
                     </div>
 
                     <div className='p-col-2'>
