@@ -13,8 +13,9 @@ import { Dialog } from 'primereact/dialog'
 import { DataTable } from 'primereact/datatable'
 import { Column } from 'primereact/column'
 import { Dropdown } from 'primereact/dropdown'
+import { validationScheme } from './validationScheme'
 
-const formatadorMoney = new Intl.NumberFormat('pt-BR', { 
+const formatadorMoney = new Intl.NumberFormat('pt-BR', {
     style: 'currency',
     currency: 'BRL'
 })
@@ -53,7 +54,8 @@ export const VendasForm: React.FC<VendasFormProps> = ({
 
     const formik = useFormik<Venda>({
         onSubmit,
-        initialValues: formScheme
+        initialValues: formScheme,
+        validationSchema: validationScheme
     })
 
     const handleClienteAutocomplete = (e: AutoCompleteCompleteMethodParams) => {
@@ -141,12 +143,12 @@ export const VendasForm: React.FC<VendasFormProps> = ({
     }
 
     const totalVenda = () => {
-        const totais: number[] = formik.values.itens?.map(iv=> iv.quantidade*iv.produto.preco);
-        if(totais.length){
-            return totais.reduce( 
+        const totais: number[] = formik.values.itens?.map(iv => iv.quantidade * iv.produto.preco);
+        if (totais.length) {
+            return totais.reduce(
                 (somatoriaAtual = 0, valorItemAtual) => somatoriaAtual + valorItemAtual);
-            
-        }else{
+
+        } else {
             return 0;
         }
     }
@@ -164,6 +166,9 @@ export const VendasForm: React.FC<VendasFormProps> = ({
                         id='cliente'
                         name='cliente'
                         onChange={handleClienteChange} />
+                    <small className='p-error p-d-block'>
+                        {formik.errors.cliente}
+                    </small>
                 </div>
 
                 <div className='p-grid'>
@@ -202,52 +207,58 @@ export const VendasForm: React.FC<VendasFormProps> = ({
                             disabled={disableAddProdutoButton()}
                             onClick={handleAddProduto} />
                     </div>
-                        <div className='p-col-12'>
-                            <DataTable value={formik.values.itens} emptyMessage="Nenhum produto adicionado.">
-                                <Column field='produto.id' header="Código" />
-                                <Column field='produto.sku' header="SKU" />
-                                <Column field='produto.nome' header="Produto" />
-                                <Column field='produto.preco' header="Preço Unidade" />
-                                <Column field='quantidade' header="Quantidade" />
-                                <Column header="Total" body={(iv: ItemVenda) => {
+                    <div className='p-col-12'>
+                        <DataTable value={formik.values.itens} emptyMessage="Nenhum produto adicionado.">
+                            <Column field='produto.id' header="Código" />
+                            <Column field='produto.sku' header="SKU" />
+                            <Column field='produto.nome' header="Produto" />
+                            <Column field='produto.preco' header="Preço Unidade" />
+                            <Column field='quantidade' header="Quantidade" />
+                            <Column header="Total" body={(iv: ItemVenda) => {
 
-                                    const total = iv.produto.preco * iv.quantidade
-                                    const totalFormatado = formatadorMoney.format(total)
-                                    return (
-                                        <div>
-                                            {totalFormatado}
-                                        </div>
-                                    )
+                                const total = iv.produto.preco * iv.quantidade
+                                const totalFormatado = formatadorMoney.format(total)
+                                return (
+                                    <div>
+                                        {totalFormatado}
+                                    </div>
+                                )
 
-                                }} />
-                            </DataTable>
-                        </div>
-                    
-                        <div className='p-col-6 center'>
-                            <div className='p-field'>
-                                <label htmlFor='formaPagamento'>Forma de Pagamento: </label>
-                                <Dropdown id='formaPagamento'
-                                    options={formasPagamento}
-                                    value={formik.values.formaPagamento}
-                                    onChange={e => formik.setFieldValue("formaPagamento", e.value)}
-                                    placeholder={"Selecione"}
-                                />
-                            </div>
-                        </div>
+                            }} />
+                        </DataTable>
+                        <small className='p-error p-d-block'>
+                            {formik.touched && formik.errors.itens}
+                        </small>
+                    </div>
 
-                        <div className='p-col-2'>
-                            <div className='p-field'>
-                                <label htmlFor="itens">Itens:</label>
-                                <InputText disabled value={formik.values.itens?.length} />
-                            </div>
+                    <div className='p-col-6 center'>
+                        <div className='p-field'>
+                            <label htmlFor='formaPagamento'>Forma de Pagamento: </label>
+                            <Dropdown id='formaPagamento'
+                                options={formasPagamento}
+                                value={formik.values.formaPagamento}
+                                onChange={e => formik.setFieldValue("formaPagamento", e.value)}
+                                placeholder={"Selecione"}
+                            />
+                            <small className='p-error p-d-block'>
+                                {formik.errors.formaPagamento}
+                            </small>
                         </div>
+                    </div>
 
-                        <div className="p-col-4">
-                            <div className="p-field">
-                                <label htmlFor="total">Total:</label>
-                                <InputText disabled value={formatadorMoney.format(formik.values.total)} />
-                            </div>
+                    <div className='p-col-2'>
+                        <div className='p-field'>
+                            <label htmlFor="itens">Itens:</label>
+                            <InputText disabled value={formik.values.itens?.length} />
                         </div>
+                    </div>
+
+                    <div className="p-col-4">
+                        <div className="p-field">
+                            <label htmlFor="total">Total:</label>
+                            <InputText disabled value={formatadorMoney.format(formik.values.total)} />
+                        </div>
+                    </div>
                 </div>
                 <Button type="submit" label="Finalizar" />
             </div>
