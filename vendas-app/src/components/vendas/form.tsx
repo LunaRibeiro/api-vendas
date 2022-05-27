@@ -70,11 +70,27 @@ export const VendasForm: React.FC<VendasFormProps> = ({
     }
 
     const handleAddProduto = () => {
-        const produtosJaAdicionados = formik.values.itens
-        produtosJaAdicionados.push({
-            produto: produto,
-            quantidade: quantidadeProduto
+        const itensAdicionados = formik.values.itens
+        const jaExisteOItem = itensAdicionados.some((iv: ItemVenda) => {
+            return iv.produto.id === produto.id
         })
+
+        if (jaExisteOItem) {
+
+            itensAdicionados.forEach((iv: ItemVenda) => {
+                if (iv.produto.id === produto.id) {
+                    iv.quantidade = iv.quantidade + quantidadeProduto
+                }
+            })
+
+        } else {
+
+            itensAdicionados.push({
+                produto: produto,
+                quantidade: quantidadeProduto
+            })
+        }
+
         setProduto(null)
         setCodigoProduto('')
         setQuantidadeProduto(0)
@@ -149,8 +165,16 @@ export const VendasForm: React.FC<VendasFormProps> = ({
                                 <Column field='produto.id' header="Código" />
                                 <Column field='produto.sku' header="SKU" />
                                 <Column field='produto.nome' header="Produto" />
-                                <Column field='produto.preco' header="Unidade" />
+                                <Column field='produto.preco' header="Preço Unidade" />
                                 <Column field='quantidade' header="Quantidade" />
+                                <Column header="Total" body={(iv: ItemVenda) => {
+                                    return (
+                                        <div>
+                                            {iv.produto.preco * iv.quantidade}
+                                        </div>
+                                    )
+
+                                }} />
                             </DataTable>
                         </div>
                     </div>
