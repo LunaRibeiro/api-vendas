@@ -4,6 +4,7 @@ import { AutoComplete, AutoCompleteChangeParams, AutoCompleteCompleteMethodParam
 import { Page } from 'app/models/common/page'
 import { Cliente } from 'app/models/clientes'
 import { useState } from "react";
+import { InputDate } from 'components'
 import { ListagemClientes } from "components/clientes";
 import { useClienteService } from 'app/services'
 import { Button } from 'primereact/button'
@@ -41,30 +42,40 @@ export const RelatorioVendas: React.FC = () => {
     return (
         <Layout titulo="Relatório de Vendas">
             <form onSubmit={formik.handleSubmit}>
-                <div className="p-grid">
-                    <div className="p-col-12">
-                        <AutoComplete suggestions={listaClientes.content}
-                            completeMethod={handleClienteAutocomplete}
-                            value={formik.values.cliente}
-                            field="nome"
-                            id="cliente"
-                            name="cliente"
-                            onChange={(e: AutoCompleteChangeParams) => { 
-                                formik.setFieldValue("cliente", e.value)
-                            }}
-                        />
-                    </div>
+                <div className="p-fluid">
+                    <div className="p-grid">
+                        <div className="p-col-12">
+                            <AutoComplete suggestions={listaClientes.content}
+                                completeMethod={handleClienteAutocomplete}
+                                value={formik.values.cliente}
+                                field="nome"
+                                id="cliente"
+                                name="cliente"
+                                onChange={(e: AutoCompleteChangeParams) => {
+                                    formik.setFieldValue("cliente", e.value)
+                                }}
+                            />
+                        </div>
 
-                    <div className="p-col-6">
+                        <div className="p-col-6">
+                            <InputDate id="dataInicio"
+                                label="Data Inicio"
+                                name="dataInicio"
+                                value={formik.values.dataInicio}
+                                onChange={formik.handleChange} />
+                        </div>
 
-                    </div>
+                        <div className="p-col-6">
+                            <InputDate id="dataFim"
+                                label="Data Fim"
+                                name="dataFim"
+                                value={formik.values.dataFim}
+                                onChange={formik.handleChange} />
+                        </div>
 
-                    <div className="p-col-6">
-                            
-                    </div>
-
-                    <div className="p-col">
-                         <Button label="Gerar Relatório" type="submit" />
+                        <div className="p-col">
+                            <Button label="Gerar Relatório" type="submit" />
+                        </div>
                     </div>
                 </div>
             </form>
