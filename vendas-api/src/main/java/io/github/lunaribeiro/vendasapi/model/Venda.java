@@ -3,12 +3,14 @@ package io.github.lunaribeiro.vendasapi.model;
 import java.math.BigDecimal;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -16,19 +18,22 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "tb_venda")
 public class Venda {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@ManyToOne
+	@JoinColumn(name = "id_cliente")
 	private Cliente cliente;
 
 	@Enumerated(EnumType.STRING)
+	@Column(name = "forma_pagamento")
 	private FormaPagamento formaPagamento;
 
-	@OneToMany(mappedBy = "tb_venda")
+	@OneToMany(mappedBy = "venda")
 	private List<ItemVenda> itens;
+
+	@Column
 	private BigDecimal total;
 
 	public Long getId() {
@@ -71,14 +76,10 @@ public class Venda {
 		this.total = total;
 	}
 
-	public Venda() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
 	@Override
 	public String toString() {
-		return "Venda [id=" + id + ", cliente=" + cliente + ", itens=" + itens + ", total=" + total + "]";
+		return "Venda [id=" + id + ", cliente=" + cliente + ", formaPagamento=" + formaPagamento + ", itens=" + itens
+				+ ", total=" + total + "]";
 	}
 
 }

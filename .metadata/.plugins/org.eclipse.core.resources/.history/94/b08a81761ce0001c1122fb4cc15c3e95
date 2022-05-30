@@ -1,0 +1,73 @@
+package io.github.lunaribeiro.vendasapi.model;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "tb_item_venda")
+public class ItemVenda {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	
+	@ManyToOne
+	@JoinColumn(name = "id_venda")
+	private Venda venda;
+	
+	@ManyToOne
+	@JoinColumn(name = "id_produto")
+	private Produto produto;
+	
+	@Column
+	private Integer quantidade;
+	
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+	public Venda getVenda() {
+		return venda;
+	}
+	public void setVenda(Venda venda) {
+		this.venda = venda;
+	}
+	public Produto getProduto() {
+		return produto;
+	}
+	public void setProduto(Produto produto) {
+		this.produto = produto;
+	}
+	public Integer getQuantidade() {
+		return quantidade;
+	}
+	public void setQuantidade(Integer quantidade) {
+		this.quantidade = quantidade;
+	}
+	@Override
+	public String toString() {
+		return "ItemVenda [id=" + id + ", venda=" + venda + ", produto=" + produto + ", quantidade=" + quantidade + "]";
+	}
+	CREATE TABLE tb_venda (
+		ID BIGSERIAL NOT NULL PRIMARY KEY,
+		ID_CLIENTE BIGINT REFERENCES tb_cliente (ID) NOT NULL,
+		FORMA_PAGAMENTO VARCHAR(8) CHECK ( FORMA_PAGAMENTO IN ('DINHEIRO', 'CARTAO', 'PIX')) NOT NULL,
+		TOTAL NUMERIC(16,2) NOT NULL
+	);
+	
+	CREATE TABLE tb_ITEM_VENDA (
+		ID BIGSERIAL NOT NULL PRIMARY KEY,
+		ID_VENDA BIGINT REFERENCES tb_venda (ID) NOT NULL,
+		ID_PRODUTO BIGINT REFERENCES tb_produto (ID) NOT NULL,
+		QUANTIDADE INTEGER NOT NULL	
+	);
+	
+}

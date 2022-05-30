@@ -1,0 +1,14 @@
+package io.github.lunaribeiro.vendasapi.model;
+
+import javax.persistence.Entity;
+
+@Entity
+public class ItemVenda {
+
+	private Long id;
+	private Venda venda;
+	private Produto produto;
+	private Integer quantidade;
+	
+	
+}

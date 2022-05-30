@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import io.github.lunaribeiro.vendasapi.model.Venda;
 
 @Repository
-public interface VendaRepository extends JpaRepository<Venda, Long> {
+public interface VendaRepository extends JpaRepository<Venda, Long>{
 
 }
