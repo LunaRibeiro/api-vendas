@@ -4193,3 +4193,4 @@ org.eclipse.core.runtime.CoreException: Could not resolve artifact net.sf.jasper
 2022-05-31 15:15:39,096 [Worker-26: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 2 resources
 2022-05-31 15:15:39,100 [Worker-26: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
 2022-05-31 15:15:39,100 [Worker-26: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered properties files.
+2022-05-31 15:15:39,100 [Worker-26: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\Suporte08\Desktop\Curso Udemy\vendas-api\src\test\resources

@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import { Layout } from 'components'
+import { Layout, Dashboard } from 'components'
 
 const Home: React.FC = () => {
   return (
@@ -9,7 +9,9 @@ const Home: React.FC = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Layout />
+      <Layout titulo='Dashboard'>
+        <Dashboard clientes={150} produtos={1000} vendas={50} />
+      </Layout>
     </div>
   )
 }
