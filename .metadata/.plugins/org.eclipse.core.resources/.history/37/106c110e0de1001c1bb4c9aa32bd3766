@@ -1,0 +1,36 @@
+package io.github.lunaribeiro.vendasapi.rest.dashboard;
+
+public class DashboardData {
+
+	private Long produtos;
+	private Long Clientes;
+	private Long vendas;
+	
+	public DashboardData(Long produtos, Long clientes, Long vendas) {
+		super();
+		this.produtos = produtos;
+		this.Clientes = clientes;
+		this.vendas = vendas;
+	}
+	
+	public Long getProdutos() {
+		return produtos;
+	}
+	public void setProdutos(Long produtos) {
+		this.produtos = produtos;
+	}
+	public Long getClientes() {
+		return Clientes;
+	}
+	public void setClientes(Long clientes) {
+		this.Clientes = clientes;
+	}
+	public Long getVendas() {
+		return vendas;
+	}
+	public void setVendas(Long vendas) {
+		this.vendas = vendas;
+	}
+	
+	
+}

@@ -9,7 +9,7 @@ const Home: React.FC = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-        <Layout />
+      <Layout />
     </div>
   )
 }
