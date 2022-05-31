@@ -1,8 +1,15 @@
 package io.github.lunaribeiro.vendasapi.rest.vendas;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +24,7 @@ import io.github.lunaribeiro.vendasapi.model.Venda;
 import io.github.lunaribeiro.vendasapi.model.repository.ItemVendaRepository;
 import io.github.lunaribeiro.vendasapi.model.repository.VendaRepository;
 import io.github.lunaribeiro.vendasapi.service.RelatorioVendasService;
+import io.github.lunaribeiro.vendasapi.util.DateUtils;
 
 
 @RestController
@@ -46,7 +54,11 @@ public class VendasController {
 				@RequestParam(value = "", required = false, defaultValue = "") String fim
 			){
 		
-		var relatorioGerado = relatorioVendasService.gerarRelatorio(id, inicio, fim);
+		Date dataInicio = DateUtils.fromString(inicio);
+		Date dataFim = DateUtils.fromString(fim, true);
+		
+		
+		var relatorioGerado = relatorioVendasService.gerarRelatorio(id, dataInicio, dataFim);
 		
 		var headers = new HttpHeaders();
 		var fileName = "relatorio.pdf";

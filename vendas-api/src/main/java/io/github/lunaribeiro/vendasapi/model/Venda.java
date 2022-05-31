@@ -1,6 +1,7 @@
 package io.github.lunaribeiro.vendasapi.model;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -13,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 @Entity
@@ -35,6 +37,22 @@ public class Venda {
 
 	@Column
 	private BigDecimal total;
+	
+	private LocalDateTime dataCadastro;
+	
+	@PrePersist
+	public void prePersist() {
+		setDataCadastro(dataCadastro.now());
+	}
+	
+
+	public LocalDateTime getDataCadastro() {
+		return dataCadastro;
+	}
+
+	public void setDataCadastro(LocalDateTime dataCadastro) {
+		this.dataCadastro = dataCadastro;
+	}
 
 	public Long getId() {
 		return id;
@@ -79,7 +97,7 @@ public class Venda {
 	@Override
 	public String toString() {
 		return "Venda [id=" + id + ", cliente=" + cliente + ", formaPagamento=" + formaPagamento + ", itens=" + itens
-				+ ", total=" + total + "]";
+				+ ", total=" + total + ", dataCadastro=" + dataCadastro + "]";
 	}
 
 }

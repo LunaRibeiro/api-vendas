@@ -3,6 +3,7 @@ package io.github.lunaribeiro.vendasapi.service;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,7 +34,7 @@ public class RelatorioVendasService {
 	@Autowired
 	private DataSource dataSource;
 	
-	public byte[] gerarRelatorio(Long id, String dataInicio, String dataFim) {
+	public byte[] gerarRelatorio(Long id, Date dataInicio, Date dataFim) {
 
 		//melhor solução e mais simples
 		
