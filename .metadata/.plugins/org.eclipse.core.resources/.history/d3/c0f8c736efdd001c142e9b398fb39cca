@@ -1,7 +1,0 @@
-package io.github.lunaribeiro.vendasapi.model;
-
-public class formaPagamento {
-	DINHEIRO,
-	CARTAO,
-	PIX
-}

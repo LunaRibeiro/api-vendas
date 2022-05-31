@@ -1,5 +1,0 @@
-package io.github.lunaribeiro.vendasapi.rest.vendas;
-
-public class VendasController {
-
-}

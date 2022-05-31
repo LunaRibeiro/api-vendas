@@ -18,42 +18,35 @@ import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "tb_venda")
+@Table(name = "venda")
 public class Venda {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-
+	
 	@ManyToOne
 	@JoinColumn(name = "id_cliente")
 	private Cliente cliente;
-
+	
 	@Enumerated(EnumType.STRING)
 	@Column(name = "forma_pagamento")
 	private FormaPagamento formaPagamento;
-
+	
 	@OneToMany(mappedBy = "venda")
 	private List<ItemVenda> itens;
-
+	
 	@Column
 	private BigDecimal total;
 	
+	@Column(name = "data_venda")
 	private LocalDateTime dataCadastro;
 	
 	@PrePersist
 	public void prePersist() {
-		setDataCadastro(dataCadastro.now());
+		setDataCadastro(LocalDateTime.now());
 	}
 	
-
-	public LocalDateTime getDataCadastro() {
-		return dataCadastro;
-	}
-
-	public void setDataCadastro(LocalDateTime dataCadastro) {
-		this.dataCadastro = dataCadastro;
-	}
-
 	public Long getId() {
 		return id;
 	}
@@ -97,7 +90,14 @@ public class Venda {
 	@Override
 	public String toString() {
 		return "Venda [id=" + id + ", cliente=" + cliente + ", formaPagamento=" + formaPagamento + ", itens=" + itens
-				+ ", total=" + total + ", dataCadastro=" + dataCadastro + "]";
+				+ ", total=" + total + "]";
 	}
 
+	public LocalDateTime getDataCadastro() {
+		return dataCadastro;
+	}
+
+	public void setDataCadastro(LocalDateTime dataCadastro) {
+		this.dataCadastro = dataCadastro;
+	}
 }

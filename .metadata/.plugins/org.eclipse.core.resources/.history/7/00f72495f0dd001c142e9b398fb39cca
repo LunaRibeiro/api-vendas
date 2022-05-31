@@ -1,7 +1,0 @@
-package io.github.lunaribeiro.vendasapi.model;
-
-public enum formaPagamento {
-	DINHEIRO,
-	CARTAO,
-	PIX
-}
