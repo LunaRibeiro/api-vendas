@@ -18,7 +18,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "tb_venda")
+@Table(name = "venda")
 public class Venda {
 
 	@Id

@@ -9,9 +9,13 @@ const Home: React.FC = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
+<<<<<<< HEAD
       <Layout titulo='Dashboard'>
         <Dashboard clientes={150} produtos={1000} vendas={50} />
       </Layout>
+=======
+        <Layout />
+>>>>>>> parent of f81339a (API do dashboard)
     </div>
   )
 }
