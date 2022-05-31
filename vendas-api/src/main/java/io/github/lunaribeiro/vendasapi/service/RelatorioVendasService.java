@@ -33,7 +33,7 @@ public class RelatorioVendasService {
 	@Autowired
 	private DataSource dataSource;
 	
-	public byte[] gerarRelatorio() {
+	public byte[] gerarRelatorio(Long id, String dataInicio, String dataFim) {
 
 		//melhor solução e mais simples
 		

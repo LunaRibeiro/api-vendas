@@ -1,8 +1,6 @@
 package io.github.lunaribeiro.vendasapi.rest.vendas;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -10,12 +8,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 
 import io.github.lunaribeiro.vendasapi.model.Venda;
 import io.github.lunaribeiro.vendasapi.model.repository.ItemVendaRepository;
 import io.github.lunaribeiro.vendasapi.model.repository.VendaRepository;
 import io.github.lunaribeiro.vendasapi.service.RelatorioVendasService;
+
 
 @RestController
 @RequestMapping("/api/vendas")
@@ -37,12 +39,16 @@ public class VendasController {
 		itemVendaRepository.saveAll(venda.getItens());
 	}
 	
-	@GetMapping("/relatorio")
-	public ResponseEntity<byte[]> relatorioVendas(){
+	@GetMapping("/relatorio-vendas")
+	public ResponseEntity<byte[]> relatorioVendas(
+				@RequestParam(value = "id", required = false, defaultValue = "0") Long id,
+				@RequestParam(value = "inicio", required = false, defaultValue = "") String inicio,
+				@RequestParam(value = "", required = false, defaultValue = "") String fim
+			){
 		
-		byte[] relatorioGerado = relatorioVendasService.gerarRelatorio();
+		var relatorioGerado = relatorioVendasService.gerarRelatorio(id, inicio, fim);
 		
-		HttpHeaders headers = new HttpHeaders();
+		var headers = new HttpHeaders();
 		var fileName = "relatorio.pdf";
 												//inline; filename = "relatorio.pdf"
 		headers.setContentDispositionFormData("inline; filename=\"" +fileName+ "\"", fileName);
