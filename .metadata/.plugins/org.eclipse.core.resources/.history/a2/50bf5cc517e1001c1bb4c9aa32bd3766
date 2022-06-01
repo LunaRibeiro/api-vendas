@@ -1,0 +1,14 @@
+package io.github.lunaribeiro.vendasapi.rest.dashboard;
+
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework
+
+@RestController
+@RequestMapping("/api/dashboard")
+public class DashboardController {
+	
+	private VendaRepository vendas;
+	private ClienteRepository clientes;
+	private ProdutoRepository produtos;
+}

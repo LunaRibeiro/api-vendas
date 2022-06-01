@@ -1,0 +1,90 @@
+package io.github.lunaribeiro.vendasapi.rest.dashboard;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+import io.github.lunaribeiro.vendasapi.model.repository.projections.VendaPorMes;
+
+public class DashboardData {
+
+	private Long tb_produtos;
+	private Long tb_clientes;
+	private Long tb_vendas;
+	private List<VendaPorMes> vendasPorMes;
+	
+	public DashboardData(Long produtos, Long clientes, Long vendas, List<VendaPorMes> vendasPorMes) {
+		super();
+		this.tb_produtos = produtos;
+		this.tb_clientes = clientes;
+		this.tb_vendas = vendas;
+		this.vendasPorMes = vendasPorMes;
+		this.preencherMesesFaltantes();
+	}
+	public Long getProdutos() {
+		return tb_produtos;
+	}
+	public void setProdutos(Long tb_produtos) {
+		this.tb_produtos = tb_produtos;
+	}
+	public Long getClientes() {
+		return tb_clientes;
+	}
+	public void setClientes(Long tb_clientes) {
+		this.tb_clientes = tb_clientes;
+	}
+	public Long getVendas() {
+		return tb_vendas;
+	}
+	public void setVendas(Long tb_vendas) {
+		this.tb_vendas = tb_vendas;
+	}
+	public List<VendaPorMes> getVendasPorMes() {
+		if(vendasPorMes == null) {
+			vendasPorMes = new ArrayList<>();
+		}
+		return vendasPorMes;
+	}
+	public void setVendasPorMes(List<VendaPorMes> vendasPorMes) {
+		this.vendasPorMes = vendasPorMes;
+	}
+	
+	public void preencherMesesFaltantes() {
+		Integer mesMaximo =  getVendasPorMes()
+									.stream()
+									.mapToInt(VendaPorMes::getMes)
+									.max().getAsInt();		
+		List<Integer> listaMeses = IntStream
+					.rangeClosed(1, mesMaximo)
+					.boxed().collect(Collectors.toList());
+		
+		List<Integer> mesesAdicionados = getVendasPorMes()
+					.stream()
+					.map(VendaPorMes::getMes)
+					.collect(Collectors.toList());
+		
+		listaMeses.stream().forEach(mes -> {
+			if(!mesesAdicionados.contains(mes)) {
+				VendaPorMes vendaPorMes = new VendaPorMes() {
+					
+					@Override
+					public BigDecimal getValor() {
+						return BigDecimal.ZERO;
+					}
+					
+					@Override
+					public Integer getMes() {
+						return mes;
+					}
+				};
+				
+				getVendasPorMes().add(vendaPorMes);
+			}
+		});
+		
+		getVendasPorMes().sort( Comparator.comparing(VendaPorMes::getMes) );
+	}
+}

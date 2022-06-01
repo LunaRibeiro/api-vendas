@@ -1,0 +1,38 @@
+package io.github.lunaribeiro.vendasapi.dashboard;
+
+import java.util.List;
+
+public class DashboardData {
+
+	public Long produtos;
+	public Long clientes;
+	public Long vendas;
+	
+	
+	public Long getProdutos() {
+		return produtos;
+	}
+	public void setProdutos(Long produtos) {
+		this.produtos = produtos;
+	}
+	public Long getClientes() {
+		return clientes;
+	}
+	public void setClientes(Long clientes) {
+		this.clientes = clientes;
+	}
+	public Long getVendas() {
+		return vendas;
+	}
+	public void setVendas(Long vendas) {
+		this.vendas = vendas;
+	}
+	public List<VendaPorMes> getVendaPorMes() {
+		return vendaPorMes;
+	}
+	public void setVendaPorMes(List<VendaPorMes> vendaPorMes) {
+		this.vendaPorMes = vendaPorMes;
+	}
+	
+	
+}

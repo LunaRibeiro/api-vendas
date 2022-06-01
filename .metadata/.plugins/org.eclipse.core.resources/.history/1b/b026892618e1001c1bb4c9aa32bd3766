@@ -1,0 +1,13 @@
+package io.github.lunaribeiro.vendasapi.rest.dashboard;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+public class DashboardController {
+
+	@Autowired
+	private VendaRepository vendas;
+	@Autowired
+	private ClienteRepository clientes;
+	@Autowired
+	private ProdutoRepository produtos;
+}
