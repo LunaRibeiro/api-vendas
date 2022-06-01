@@ -1,7 +1,13 @@
 import Head from 'next/head'
 import { Layout, Dashboard } from 'components'
+import { useDashboardService } from 'app/services/dashboard.service'
+import { DashboardData } from 'app/models/dashboard'
 
-const Home: React.FC = () => {
+interface HomeProps {
+  dashboard: DashboardData
+}
+
+const Home: React.FC<HomeProps> = (props: HomeProps) => {
   return (
     <div>
       <Head>
@@ -9,15 +15,28 @@ const Home: React.FC = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-<<<<<<< HEAD
-      <Layout titulo='Dashboard'>
-        <Dashboard clientes={150} produtos={1000} vendas={50} />
+      <Layout titulo="Dashboard">
+        <Dashboard clientes={props.dashboard.clientes} 
+                   produtos={props.dashboard.produtos} 
+                   vendas={props.dashboard.vendas} 
+                   vendasPorMes={props.dashboard.vendasPorMes}
+                   />
       </Layout>
-=======
-        <Layout />
->>>>>>> parent of f81339a (API do dashboard)
     </div>
   )
 }
+
+export async function getStaticProps(context){
+
+  const service = useDashboardService()
+  const dashboard: DashboardData = await service.get(); 
+
+  return {
+    props: {
+      dashboard
+    },
+    revalidate: 5// em segundos
+  }
+} 
 
 export default Home;
